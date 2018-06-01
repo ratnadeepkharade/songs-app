@@ -20,20 +20,36 @@ var songs = [
 
 ];
 
-var SongItem = pakka({
+// code to add 1st song in songs list without looping
+var SongItem = pakka.create({
     name: 'song-item',
     html: '<li class="list-group-item" bind-text="name"></li>',
     css: '',
     controller: function(context) {
-        context.$set('name', 'song 2')
+        context.$set('name', 'My song 2')
     }
 });
 
-SongApp.$set('songItemComponent', new SongItem());
+SongApp.$set('songItemComponent', SongItem);
 
-
+// array to hold song item components
+var songItemComponentList = [];
 function init(){
     songs.forEach(function(song){
+        var SongItem = pakka.create({
+            name: 'song-item',
+            html: '<li class="list-group-item" bind-text="name"></li>',
+            css: '',
+            controller: function(context) {
+                context.$set('name', song.name);
+            }
+        });
 
+        songItemComponentList.push(SongItem);
     });
+
+    SongApp.$set('songItemComponentList', songItemComponentList);
+
 }
+
+init();
