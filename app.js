@@ -15,25 +15,21 @@ SongApp.addSong = function(event) {
 // songs list array
 var songs = [
     {   
-        id: 1,
         name: 'song 1',
         album: 'album 1',
         singers: ['singer 1', 'singer 2', 'singer 3']
     },
     {   
-        id: 2,
         name: 'song 2',
         album: 'album 1',
         singers: ['singer 1', 'singer 2', 'singer 3']
     },
     {   
-        id: 3,
         name: 'song 3',
         album: 'album 1',
         singers: ['singer 1', 'singer 2', 'singer 3']
     },
     {   
-        id: 4,
         name: 'song 4',
         album: 'album 1',
         singers: ['singer 1', 'singer 2', 'singer 3']
@@ -87,16 +83,24 @@ init();
 function createSongItemComponent(song, index) {
     var SongItem = pakka.create({
         name: 'song-item',
-        html: '<li class="list-group-item" bind-text="name" click-handle="clicked"></li>',
-        css: '.list-group-item:hover{background-color:#eee; cursor:pointer}',
+        html: `<li class="list-group-item song-wrapper" click-handle="songClicked"><span bind-text="name"></span> <span class="delete" click-handle="deleteClicked">X</span> </li>`,
+        css: `.list-group-item:hover{background-color:#eee; cursor:pointer}
+                .song-wrapper{position:relative} .delete{position:absolute; right: 15px; top: 10px;} .delete:hover{font-weight:bold;}`,
         controller: function (context) {
 
             context.$set('songObj', song);
             context.$set('name', song.name);
 
-            context.clicked = function(event){
-                selectedSong = context.$get('songObj');;
+            context.$set('id', index);
+
+            context.songClicked = function(event){
+                event.preventDefault();
+                selectedSong = context.$get('songObj');
                 addSongToDetails(selectedSong, index);
+            }
+
+            context.deleteClicked = function(event){
+                event.stopPropagation();
             }
         }
     });
@@ -153,25 +157,25 @@ function createAddSongComponent() {
                                     <div class="form-group row">
                                         <label for="songName" class="col-sm-2 col-form-label">Song Name:</label>
                                         <div class="col-sm-10">
-                                            <input type="email" class="form-control" id="songName" placeholder="Enter Song Name">
+                                            <input bind-property="songModel" type="text" class="form-control" id="songName" placeholder="Enter Song Name">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="albumName" class="col-sm-2 col-form-label">Album Name:</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="albumName" placeholder="Enter Album Name">
+                                            <input bind-property="albumModel" type="text" class="form-control" id="albumName" placeholder="Enter Album Name">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="singersNames" class="col-sm-2 col-form-label">Singers:</label>
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="singersNames" placeholder="Enter Singers">
+                                            <input bind-property="singersModel" type="text" class="form-control" id="singersNames" placeholder="Enter Singers">
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
                                             <button type="button" class="btn btn-outline-danger mb-2 float-right" click-handle="cancelClicked">Cancel</button>
-                                            <button type="button" class="btn btn-outline-primary mb-2 float-left" click-handle="cancelClicked">Save</button>
+                                            <button type="button" class="btn btn-outline-primary mb-2 float-left" click-handle="saveClicked">Save</button>
                                         </div>
                                     </div>
                                 </form>
@@ -182,6 +186,30 @@ function createAddSongComponent() {
         css: '',
         controller: function (context) {
             context.cancelClicked = function(event){
+                AddSongComponent.$destroy();
+            }
+
+            context.saveClicked = function(event){
+                var songModel = context.$get('songModel');
+                var albumModel = context.$get('albumModel') || '';
+                var singersModel = context.$get('singersModel') || '';
+
+                if(!songModel || songModel.trim() === ''){
+                    return;
+                }
+
+                var songObj = {
+                    name: songModel,
+                    album: albumModel,
+                    singers: singersModel.split(',')
+                }
+
+                songs.push(songObj);
+                
+                songItemComponentList.push(createSongItemComponent(songObj, songs.length));
+
+                SongApp.$set('songItemComponentList', songItemComponentList);
+
                 AddSongComponent.$destroy();
             }
         }
