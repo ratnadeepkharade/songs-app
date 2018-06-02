@@ -101,6 +101,15 @@ function createSongItemComponent(song, index) {
 
             context.deleteClicked = function(event){
                 event.stopPropagation();
+                var id = context.$get('id');
+
+                console.log(id);
+                songs.splice(id, 1);
+                songItemComponentList=[];
+                songs.forEach(function (song, index) {
+                    songItemComponentList.push(createSongItemComponent(song, index));
+                });
+                SongApp.$set('songItemComponentList', songItemComponentList);
             }
         }
     });
