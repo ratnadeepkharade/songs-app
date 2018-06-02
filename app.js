@@ -215,7 +215,7 @@ function createAddSongComponent() {
 
                 songs.push(songObj);
                 
-                songItemComponentList.push(createSongItemComponent(songObj, songs.length));
+                songItemComponentList.push(createSongItemComponent(songObj, songs.length-1));
 
                 SongApp.$set('songItemComponentList', songItemComponentList);
 
