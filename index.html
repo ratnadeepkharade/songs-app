@@ -20,49 +20,14 @@
 
     <div class="songApp">
         <div class="container">
-            <div class="row" id="add-song-form-wrapper">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title">Add Song</h5>
-                        </div>
-                        <div class="card-body">
-                            <form>
-                                <div class="form-group row">
-                                    <label for="songName" class="col-sm-2 col-form-label">Song Name:</label>
-                                    <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="songName" placeholder="Enter Song Name">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="albumName" class="col-sm-2 col-form-label">Album Name:</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="albumName" placeholder="Enter Album Name">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="singersNames" class="col-sm-2 col-form-label">Singers:</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" id="singersNames" placeholder="Enter Singers">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button type="button" class="btn btn-outline-danger mb-2  float-right">Cancel</button>
-                                        <button type="button" class="btn btn-outline-primary mb-2  float-left">Save</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div bind-component="addSongComponent"></div>
             <div class="row">
                 <div class="col-5">
                     <div class="card">
                         <!--div class="card-header">Songs</div-->
                         <div class="card-body">
-                            <h5 class="card-title">Songs</h5>
+                            <div class="float-left"><h5 class="card-title">Songs</h5></div>
+                            <div class="float-right"> <button type="button" class="btn btn-outline-primary mb-2 btn-sm" click-handle="addSong">Add Song</button> </div>
                         </div>
                         <ul class="list-group list-group-flush">
                             <!--li class="list-group-item">My song 1</li>

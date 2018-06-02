@@ -1,6 +1,17 @@
 // create initial app component
 var SongApp = pakka.create('.songApp');
 
+SongApp.showAddElement = false;
+
+//SongApp.$set('hidden', {'hidden1': SongApp.showAddElement});
+
+SongApp.addSong = function(event) {
+    event.preventDefault();
+    SongApp.showAddElement = !SongApp.showAddElement;
+
+    addSongToAddComponent();
+}
+
 // songs list array
 var songs = [
     {   
@@ -67,6 +78,8 @@ function init() {
     
     SongApp.$set('songDetailsComponent', createSongDetailsComponent(selectedSong, 0));
 
+    //SongApp.$set('addSongComponent', addSongToAddComponent());
+
 }
 init();
 
@@ -97,11 +110,6 @@ function addSongToList(SongItem) {
     SongApp.$set('songItemComponentList', songItemComponentList);
 }
 
-// function attaches song details component to DOM
-function addSongToDetails(song, index){
-    SongApp.$set('songDetailsComponent', createSongDetailsComponent(song, index));
-}
-
 
 // function returns new song details component
 function createSongDetailsComponent(song, index) {
@@ -123,4 +131,67 @@ function createSongDetailsComponent(song, index) {
     });
 
     return SongDetailsComponent;
+}
+
+// function attaches song details component to DOM
+function addSongToDetails(song, index){
+    SongApp.$set('songDetailsComponent', createSongDetailsComponent(song, index));
+}
+
+// function returns add song  component
+function createAddSongComponent() {
+    var AddSongComponent = pakka.create({
+        name: 'add-song-component',
+        html: `<div class="row" id="add-song-form-wrapper">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">Add Song</h5>
+                            </div>
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-group row">
+                                        <label for="songName" class="col-sm-2 col-form-label">Song Name:</label>
+                                        <div class="col-sm-10">
+                                            <input type="email" class="form-control" id="songName" placeholder="Enter Song Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="albumName" class="col-sm-2 col-form-label">Album Name:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="albumName" placeholder="Enter Album Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="singersNames" class="col-sm-2 col-form-label">Singers:</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="singersNames" placeholder="Enter Singers">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button type="button" class="btn btn-outline-danger mb-2 float-right" click-handle="cancelClicked">Cancel</button>
+                                            <button type="button" class="btn btn-outline-primary mb-2 float-left" click-handle="cancelClicked">Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>`,
+        css: '',
+        controller: function (context) {
+            context.cancelClicked = function(event){
+                AddSongComponent.$destroy();
+            }
+        }
+    });
+
+    return AddSongComponent;
+}
+var AddSongComponent;
+// function attaches song details component to DOM
+function addSongToAddComponent(){
+    AddSongComponent = createAddSongComponent()
+    SongApp.$set('addSongComponent', AddSongComponent);
 }
